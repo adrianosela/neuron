@@ -1,8 +1,7 @@
 #!/usr/bin/env python
 
 import pandas as pd
-from keras.layers import Dense
-from keras.models import Sequential
+import tensorflow as tf
 from sklearn import preprocessing
 from sklearn.model_selection import train_test_split
 import sys
@@ -42,10 +41,10 @@ def model(features):
     """
 
     # specify our model's architecture
-    model = Sequential([
-        Dense(32, activation='relu', input_shape=(features,)),
-        Dense(32, activation='relu'),
-        Dense(1, activation='sigmoid'),
+    model = tf.keras.models.Sequential([
+        tf.keras.layers.Dense(32, activation=tf.nn.relu, input_shape=(features,)),
+        tf.keras.layers.Dense(32, activation=tf.nn.relu),
+        tf.keras.layers.Dense(1, activation=tf.nn.sigmoid),
     ])
     # compile model with stochastic gradient descent optimizer
     # to determine the optimizing multipliers for the hidden layers
