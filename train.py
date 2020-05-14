@@ -55,7 +55,7 @@ if __name__ == "__main__":
     try:
         filename, features, test_partition = sys.argv[1], int(sys.argv[2]), float(sys.argv[3])
     except:
-        print("\nerror - missing arguments\n")
+        print("\nerror - bad arguments\n")
         print("USAGE: ./train.py [FILENAME] [FEATURES] [TEST_PARTITION]")
         print("\ne.g. for a csv file with 10 features, taking 30% for testing the model")
         print("$ ./train.py ./house_prices.csv 10 0.3")
