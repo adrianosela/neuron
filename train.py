@@ -50,13 +50,6 @@ def model(features):
     model.compile(optimizer='sgd', loss='binary_crossentropy', metrics=['accuracy'])
     return model
 
-# we have a csv file with 10 features.
-FILENAME = './housepricedata.csv'
-FEATURES = 10
-
-# we will use 40% of the data for validation and testing
-TEST_PARTITION = 0.4
-
 if __name__ == "__main__":
     # parse and validate args
     try:
