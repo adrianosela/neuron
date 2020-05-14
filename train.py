@@ -1,10 +1,11 @@
 #!/usr/bin/env python
 
 import pandas as pd
+from keras.layers import Dense
+from keras.models import Sequential
 from sklearn import preprocessing
 from sklearn.model_selection import train_test_split
-from keras.models import Sequential
-from keras.layers import Dense
+import sys
 
 """
 prepare the data by segmenting it as follows:
@@ -32,15 +33,15 @@ def prepare(filename, features, test_partition):
 
 """
 model architecture is as follows:
-- input layer    : 10 features
+- input layer    : features
 - hidden layer 1 : 32 neurons, ReLU activation
 - hidden layer 2 : 32 neurons, ReLU activation
 - output layer   : 1 neuron,   sigmoid activation
 """
-def model():
+def model(features):
     # specify our model's architecture
     model = Sequential([
-        Dense(32, activation='relu', input_shape=(10,)),
+        Dense(32, activation='relu', input_shape=(features,)),
         Dense(32, activation='relu'),
         Dense(1, activation='sigmoid'),
     ])
@@ -49,8 +50,29 @@ def model():
     model.compile(optimizer='sgd', loss='binary_crossentropy', metrics=['accuracy'])
     return model
 
+# we have a csv file with 10 features.
+FILENAME = './housepricedata.csv'
+FEATURES = 10
+
+# we will use 40% of the data for validation and testing
+TEST_PARTITION = 0.4
+
 if __name__ == "__main__":
-    x_train, x_val, x_test, y_train, y_val, y_test = prepare('./housepricedata.csv', 10, 0.3)
-    model = model()
+    # parse and validate args
+    try:
+        filename, features, test_partition = sys.argv[1], int(sys.argv[2]), float(sys.argv[3])
+    except:
+        print("\nerror - missing arguments\n")
+        print("USAGE: ./train.py [FILENAME] [FEATURES] [TEST_PARTITION]")
+        print("\ne.g. for a csv file with 10 features, taking 30% for testing the model")
+        print("$ ./train.py ./house_prices.csv 10 0.3")
+        sys.exit(1)
+
+    # build the model
+    model = model(features)
+    # load the data and partition it into { training, validation, testing }
+    x_train, x_val, x_test, y_train, y_val, y_test = prepare(filename, features, test_partition)
+    # train the model
     model.fit(x_train, y_train, batch_size=32, epochs=100, validation_data=(x_val, y_val))
-    print(model.evaluate(x_test, y_test)) # returns (loss, accuracy) tuple
+    # evaluate the model, returns (loss, accuracy) tuple
+    print(model.evaluate(x_test, y_test))
