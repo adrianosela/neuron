@@ -7,16 +7,17 @@ from sklearn import preprocessing
 from sklearn.model_selection import train_test_split
 import sys
 
-"""
-prepare the data by segmenting it as follows:
-- x_train : input features, (100 - test_partition) % of full dataset
-- x_val   : input features, (test_partition/2) % of full dataset
-- x_test  : input features, (test_partition/2) % of full dataset
-- y_train : label,          (100 - test_partition) % of full dataset
-- y_val   : label,          (test_partition/2) % of full dataset
-- y_test  : label,          (test_partition/2) % of full dataset
-"""
 def prepare(filename, features, test_partition):
+    """
+    prepare the data by segmenting it as follows:
+    - x_train : input features, (100 - test_partition) % of full dataset
+    - x_val   : input features, (test_partition/2) % of full dataset
+    - x_test  : input features, (test_partition/2) % of full dataset
+    - y_train : label,          (100 - test_partition) % of full dataset
+    - y_val   : label,          (test_partition/2) % of full dataset
+    - y_test  : label,          (test_partition/2) % of full dataset
+    """
+
     # load the dataset
     dset = pd.read_csv(filename).values
     # our x variable is columns 0-features, all rows
@@ -31,14 +32,15 @@ def prepare(filename, features, test_partition):
     x_val, x_test, y_val, y_test = train_test_split(x_val_and_test, y_val_and_test, test_size=0.5)
     return x_train, x_val, x_test, y_train, y_val, y_test
 
-"""
-model architecture is as follows:
-- input layer    : features
-- hidden layer 1 : 32 neurons, ReLU activation
-- hidden layer 2 : 32 neurons, ReLU activation
-- output layer   : 1 neuron,   sigmoid activation
-"""
 def model(features):
+    """
+    model architecture is as follows:
+    - input layer    : features
+    - hidden layer 1 : 32 neurons, ReLU activation
+    - hidden layer 2 : 32 neurons, ReLU activation
+    - output layer   : 1 neuron,   sigmoid activation
+    """
+
     # specify our model's architecture
     model = Sequential([
         Dense(32, activation='relu', input_shape=(features,)),
