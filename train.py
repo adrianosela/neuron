@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+import matplotlib.pyplot as plt
 import pandas as pd
 import tensorflow as tf
 from sklearn import preprocessing
@@ -31,7 +32,7 @@ def prepare(filename, features, test_partition):
     x_val, x_test, y_val, y_test = train_test_split(x_val_and_test, y_val_and_test, test_size=0.5)
     return x_train, x_val, x_test, y_train, y_val, y_test
 
-def model(features):
+def build_model(features):
     """
     model architecture is as follows:
     - input layer    : features
@@ -51,6 +52,19 @@ def model(features):
     model.compile(optimizer='sgd', loss='binary_crossentropy', metrics=['accuracy'])
     return model
 
+def evaluate(model, x_test, y_test):
+    # evalurate returns a (loss, accuracy) tuple
+    print(model.evaluate(x_test, y_test))
+
+def plot_hist(hist):
+    plt.plot(hist.history['loss'])
+    plt.plot(hist.history['val_loss'])
+    plt.title('Model Loss')
+    plt.xlabel('loss')
+    plt.ylabel('epoch')
+    plt.legend(['training', 'validation'], loc='upper right')
+    plt.show()
+
 if __name__ == "__main__":
     # parse and validate args
     try:
@@ -63,10 +77,11 @@ if __name__ == "__main__":
         sys.exit(1)
 
     # build the model
-    model = model(features)
+    model = build_model(features)
     # load the data and partition it into { training, validation, testing }
     x_train, x_val, x_test, y_train, y_val, y_test = prepare(filename, features, test_partition)
     # train the model
-    model.fit(x_train, y_train, batch_size=32, epochs=100, validation_data=(x_val, y_val))
-    # evaluate the model, returns (loss, accuracy) tuple
-    print(model.evaluate(x_test, y_test))
+    hist = model.fit(x_train, y_train, batch_size=32, epochs=100, validation_data=(x_val, y_val))
+    # visualize loss
+    plot_hist(hist)
+
