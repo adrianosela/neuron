@@ -52,16 +52,21 @@ def build_model(features):
     model.compile(optimizer='sgd', loss='binary_crossentropy', metrics=['accuracy'])
     return model
 
-def evaluate(model, x_test, y_test):
-    # evalurate returns a (loss, accuracy) tuple
-    print(model.evaluate(x_test, y_test))
-
-def plot_hist(hist):
+def visualize_loss(hist):
+    plt.title('Model Loss')
+    plt.xlabel('epoch')
+    plt.ylabel('loss')
     plt.plot(hist.history['loss'])
     plt.plot(hist.history['val_loss'])
-    plt.title('Model Loss')
-    plt.xlabel('loss')
-    plt.ylabel('epoch')
+    plt.legend(['training', 'validation'], loc='upper right')
+    plt.show()
+
+def visualize_accuracy(hist):
+    plt.title('Model Accuracy')
+    plt.xlabel('epoch')
+    plt.ylabel('accuracy')
+    plt.plot(hist.history['accuracy'])
+    plt.plot(hist.history['val_accuracy'])
     plt.legend(['training', 'validation'], loc='upper right')
     plt.show()
 
@@ -82,7 +87,7 @@ if __name__ == "__main__":
     x_train, x_val, x_test, y_train, y_val, y_test = prepare(filename, features, test_partition)
     # train the model
     hist = model.fit(x_train, y_train, batch_size=32, epochs=100, validation_data=(x_val, y_val))
-    evaluate(model, x_test, y_test)
-    # visualize loss
-    plot_hist(hist)
+    # visualize loss and accuracy over epoch
+    visualize_loss(hist)
+    visualize_accuracy(hist)
 
