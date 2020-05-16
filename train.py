@@ -82,6 +82,7 @@ if __name__ == "__main__":
     x_train, x_val, x_test, y_train, y_val, y_test = prepare(filename, features, test_partition)
     # train the model
     hist = model.fit(x_train, y_train, batch_size=32, epochs=100, validation_data=(x_val, y_val))
+    evaluate(model, x_test, y_test)
     # visualize loss
     plot_hist(hist)
 
